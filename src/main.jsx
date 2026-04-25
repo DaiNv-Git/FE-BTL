@@ -19,6 +19,18 @@ import {
   Trash2,
   Users,
   XCircle,
+  Settings2,
+  LayoutTemplate,
+  FileEdit,
+  BookOpen,
+  X,
+  Undo2,
+  Redo2,
+  Eye,
+  ZoomIn,
+  ZoomOut,
+  Phone,
+  Mail,
 } from 'lucide-react';
 import './styles.css';
 
@@ -454,7 +466,6 @@ function App() {
             setUserForm={setUserForm}
             createUser={createUser}
             notifications={notifications}
-            setQuery={setQuery}
           />
         )}
         </div>
@@ -671,57 +682,9 @@ function JobSeekerView({ activeTab, jobs, selectedJob, setSelectedJobId, query, 
       {activeTab === 'cv' && (
       <section className="cv-workspace" id="cv">
         {cvStep === 'select-template' ? (
-          <div className="panel template-selection-step" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
-            <div className="section-heading" style={{ textAlign: 'center', marginBottom: '32px' }}>
-              <h2>Chon Mau CV De Bat Dau</h2>
-              <p className="muted" style={{ marginTop: '8px' }}>TopCV cung cap nhieu mau CV chuyen nghiep. Hay chon mot mau phu hop voi phong cach cua ban.</p>
-            </div>
-            <div className="template-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-              {[
-                ['classic', 'Chuyen nghiep (Classic)', 'Phong cach tieu chuan, thanh lich. Phu hop cho hau het nganh nghe va moi nha tuyen dung.', 'linear-gradient(135deg, #ffffff, #f1f5f9)'],
-                ['modern', 'Hien dai (Modern)', 'Thiet ke hai cot, lam noi bat ky nang. Danh cho IT, Design, Marketing.', 'linear-gradient(135deg, #f0fdf4, #bbf7d0)'],
-                ['creative', 'Sang tao (Creative)', 'Phoi mau doc dao, gradient noi bat. The hien ca tinh rieng cua ban.', 'linear-gradient(135deg, #fdf4ff, #e879f9)'],
-                ['minimal', 'Toi gian (Minimal)', 'Trang va Den, sang trong tuyet doi. Tap trung 100% vao noi dung.', 'linear-gradient(135deg, #f9fafb, #d1d5db)'],
-                ['tech', 'Cong nghe (Tech)', 'Giao dien Dark Mode phong cach lap trinh vien. Hieu ung code doc dao.', 'linear-gradient(135deg, #111827, #374151)'],
-                ['executive', 'Quan ly (Executive)', 'Mau xanh Navy sang de. The hien uy quyen va kinh nghiem day dan.', 'linear-gradient(135deg, #eff6ff, #93c5fd)']
-              ].map(([value, label, desc, bg]) => (
-                <div key={value} className="template-card" onClick={() => { setCvForm({ ...cvForm, template: value }); setCvStep('fill-form'); }} style={{ background: 'var(--bg-panel)', border: `2px solid ${cvForm.template === value ? 'var(--primary)' : 'var(--border)'}`, borderRadius: '12px', padding: '16px', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: 'var(--shadow)', textAlign: 'center' }}>
-                   <div style={{ background: bg, height: '160px', borderRadius: '8px', marginBottom: '16px', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                     <FileText size={48} color={value === 'tech' ? '#10b981' : 'rgba(0,0,0,0.1)'} />
-                   </div>
-                   <h3 style={{ color: 'var(--text-main)', marginBottom: '8px', fontSize: '16px' }}>{label}</h3>
-                   <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.5' }}>{desc}</p>
-                   <button className={cvForm.template === value ? 'primary' : ''} style={{ width: '100%', marginTop: '16px', padding: '8px' }}>{cvForm.template === value ? 'Dang chon' : 'Su dung mau nay'}</button>
-                </div>
-              ))}
-            </div>
-          </div>
+          <CvTemplateSelector cvForm={cvForm} setCvForm={setCvForm} setCvStep={setCvStep} />
         ) : (
-          <>
-            <form className="panel form cv-form" onSubmit={saveCv}>
-              <div className="section-heading" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h2>Thong Tin CV</h2>
-                <button type="button" onClick={() => setCvStep('select-template')} style={{ background: 'transparent', border: '1px dashed var(--border)', padding: '6px 12px', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer' }}>Đổi mẫu CV</button>
-              </div>
-              <div className="inline-fields">
-                <input value={cvForm.title} onChange={(event) => setCvForm({ ...cvForm, title: event.target.value })} placeholder="Ten CV (VD: CV Front-end Developer)" required />
-                <input value={cvForm.desiredPosition} onChange={(event) => setCvForm({ ...cvForm, desiredPosition: event.target.value })} placeholder="Vi tri ung tuyen" required />
-              </div>
-              <input value={cvForm.experienceLevel} onChange={(event) => setCvForm({ ...cvForm, experienceLevel: event.target.value })} placeholder="Cap bac hien tai (VD: Nhan vien, Truong phong...)" required />
-              <textarea value={cvForm.summary} onChange={(event) => setCvForm({ ...cvForm, summary: event.target.value })} rows="4" placeholder="Muc tieu nghe nghiep / Gioi thieu ngan gon ve ban than" required />
-              <textarea value={cvForm.skills} onChange={(event) => setCvForm({ ...cvForm, skills: event.target.value })} rows="3" placeholder="Ky nang chuyen mon (VD: React, Node.js, Design...)" required />
-              <textarea value={cvForm.education} onChange={(event) => setCvForm({ ...cvForm, education: event.target.value })} rows="3" placeholder="Trinh do hoc van / Bang cap" required />
-              <textarea value={cvForm.experience} onChange={(event) => setCvForm({ ...cvForm, experience: event.target.value })} rows="4" placeholder="Kinh nghiem lam viec (Liet ke cac du an, cong ty da lam)" required />
-              <textarea value={cvForm.projects} onChange={(event) => setCvForm({ ...cvForm, projects: event.target.value })} rows="3" placeholder="Du an ca nhan / Du an noi bat" />
-              <div className="inline-fields">
-                <input value={cvForm.languages} onChange={(event) => setCvForm({ ...cvForm, languages: event.target.value })} placeholder="Ngoai ngu (VD: Tieng Anh IELTS 7.0)" />
-                <input value={cvForm.hobbies} onChange={(event) => setCvForm({ ...cvForm, hobbies: event.target.value })} placeholder="So thich (VD: Doc sach, Chay bo)" />
-              </div>
-              <textarea value={cvForm.certifications} onChange={(event) => setCvForm({ ...cvForm, certifications: event.target.value })} rows="2" placeholder="Chung chi / Giai thuong (Khong bat buoc)" />
-              <button className="primary w-full" style={{ padding: '14px', fontSize: '16px' }}><Save size={20} /> Luu & Hoan tat CV</button>
-            </form>
-            <CvPreview cvForm={cvForm} candidate={candidates[0]} />
-          </>
+          <CvBuilder cvForm={cvForm} setCvForm={setCvForm} setCvStep={setCvStep} candidate={candidates[0]} saveCv={saveCv} />
         )}
       </section>
       )}
@@ -746,61 +709,317 @@ function JobSeekerView({ activeTab, jobs, selectedJob, setSelectedJobId, query, 
   );
 }
 
-function CvPreview({ cvForm, candidate }) {
+function CvBuilder({ cvForm, setCvForm, setCvStep, candidate, saveCv }) {
+  const [activeTab, setActiveTab] = useState('design');
+  
   return (
-    <article className={`cv-preview panel ${cvForm.template || 'classic'}`}>
-      <div className="cv-header">
-        <div>
-          <h2>{candidate?.fullName || 'Ung vien'}</h2>
-          <p>{cvForm.desiredPosition}</p>
+    <div className="cv-builder-layout">
+      {/* Sidebar */}
+      <div className="cv-builder-sidebar">
+         <button className={`builder-tab ${activeTab === 'design' ? 'active' : ''}`} onClick={() => setActiveTab('design')}>
+            <Settings2 size={18}/> Thiết kế & Font
+         </button>
+         <button className="builder-tab"><Plus size={18}/> Thêm mục</button>
+         <button className="builder-tab"><LayoutTemplate size={18}/> Bố cục</button>
+         <button className="builder-tab" onClick={() => setCvStep('select-template')}><RefreshCw size={18}/> Đổi mẫu CV</button>
+         <button className="builder-tab"><FileEdit size={18}/> Gợi ý viết CV</button>
+         <button className="builder-tab"><BookOpen size={18}/> Thư viện CV</button>
+      </div>
+
+      {/* Properties Panel */}
+      {activeTab === 'design' && (
+        <div className="cv-builder-properties">
+           <div className="props-header">
+              <h3>Thiết kế & Font</h3>
+              <button onClick={() => setActiveTab(null)} className="btn-icon"><X size={16}/></button>
+           </div>
+           <div className="props-body">
+              <label>FONT CHỮ</label>
+              <select className="cv-select"><option>Times New Roman</option><option>Arial</option><option>Roboto</option></select>
+              
+              <label>CỠ CHỮ</label>
+              <div className="range-container">
+                 <input type="range" min="1" max="3" defaultValue="2" />
+                 <div className="range-labels"><span>Nhỏ</span><span>Trung bình</span><span>Siêu lớn</span></div>
+              </div>
+
+              <label>KHOẢNG CÁCH DÒNG</label>
+              <div className="range-container">
+                 <input type="range" min="1.0" max="2.0" step="0.1" defaultValue="1.5" />
+                 <div className="range-labels"><span>1.0</span><span>2.0</span></div>
+              </div>
+
+              <label>MÀU CHỦ ĐỀ</label>
+              <div className="color-picker-mock">
+                 <div className="current-color"></div>
+                 <div className="color-gradient-box"></div>
+                 <div className="color-hex">000000</div>
+              </div>
+           </div>
         </div>
-        <span>{cvForm.experienceLevel}</span>
+      )}
+
+      {/* Main Preview Area */}
+      <div className="cv-builder-preview-area">
+         <div className="cv-builder-topbar">
+            <div className="cv-doc-name-container">
+               <FileText size={18} color="#00b14f" />
+               <input className="cv-doc-name" value={cvForm.title} onChange={e => setCvForm({...cvForm, title: e.target.value})} />
+            </div>
+            <div className="cv-topbar-actions">
+               <button className="btn-icon"><Undo2 size={16}/></button>
+               <button className="btn-icon"><Redo2 size={16}/></button>
+               <button className="btn-secondary"><Eye size={16}/> Xem trước</button>
+               <button className="btn-primary" onClick={saveCv}><Save size={16}/> Lưu CV</button>
+            </div>
+         </div>
+         <div className="cv-paper-container">
+            <div className="cv-tip-bar">
+               <span>Gợi ý: Bôi đen văn bản để chỉnh sửa cỡ chữ và định dạng!</span>
+               <button className="btn-icon-small"><X size={14}/></button>
+            </div>
+            <div className="cv-paper">
+               {/* Extremely detailed minimalist CV */}
+               <CvPreview cvForm={cvForm} candidate={candidate} isEditable={true} setCvForm={setCvForm} />
+            </div>
+            
+            <div className="cv-feedback-section">
+               <h4>Bạn có hài lòng với trải nghiệm tạo CV trên TopCV không?</h4>
+               <div className="feedback-emojis">
+                  <button className="emoji-btn">
+                     <span className="emoji">😞</span><span>Rất tệ</span>
+                  </button>
+                  <button className="emoji-btn">
+                     <span className="emoji">🙁</span><span>Tệ</span>
+                  </button>
+                  <button className="emoji-btn">
+                     <span className="emoji">😐</span><span>Bình thường</span>
+                  </button>
+                  <button className="emoji-btn">
+                     <span className="emoji">🙂</span><span>Tốt</span>
+                  </button>
+                  <button className="emoji-btn">
+                     <span className="emoji">😍</span><span>Tuyệt vời</span>
+                  </button>
+               </div>
+            </div>
+         </div>
+         
+         <div className="cv-zoom-controls">
+            <button className="btn-icon"><ZoomOut size={16}/></button>
+            <span>100%</span>
+            <button className="btn-icon"><ZoomIn size={16}/></button>
+         </div>
       </div>
-      <div className="cv-contact">
-        <span>{candidate?.email}</span>
-        <span>{candidate?.phone}</span>
-      </div>
-      <section>
-        <h3>Muc tieu</h3>
-        <p>{cvForm.summary}</p>
-      </section>
-      <section>
-        <h3>Ky nang</h3>
-        <p>{cvForm.skills}</p>
-      </section>
-      <section>
-        <h3>Hoc van</h3>
-        <p>{cvForm.education}</p>
-      </section>
-      <section>
-        <h3>Kinh nghiem</h3>
-        <p>{cvForm.experience}</p>
-      </section>
-      {cvForm.projects && (
-      <section>
-        <h3>Du an noi bat</h3>
-        <p>{cvForm.projects}</p>
-      </section>
-      )}
-      {cvForm.languages && (
-      <section>
-        <h3>Ngoai ngu</h3>
-        <p>{cvForm.languages}</p>
-      </section>
-      )}
-      {cvForm.hobbies && (
-      <section>
-        <h3>So thich</h3>
-        <p>{cvForm.hobbies}</p>
-      </section>
-      )}
-      <section>
-        <h3>Chung chi</h3>
-        <p>{cvForm.certifications || 'Chua cap nhat'}</p>
-      </section>
-    </article>
+    </div>
   );
 }
+
+function CvPreview({ cvForm, candidate, isEditable, setCvForm }) {
+  const parseList = (text) => text ? text.split('\n').filter(l => l.trim() !== '') : [];
+
+  const handleEdit = (field, value) => {
+    if (isEditable && setCvForm) {
+      setCvForm({ ...cvForm, [field]: value });
+    }
+  };
+
+  return (
+    <div className={`harvard-cv ${cvForm.template || 'classic'}`}>
+       <div className="h-header">
+          <h1 contentEditable={isEditable} suppressContentEditableWarning onBlur={e => handleEdit('fullName', e.target.innerText)}>
+             {candidate?.fullName || 'Nguyen Van Dai'}
+          </h1>
+          <h2 contentEditable={isEditable} suppressContentEditableWarning onBlur={e => handleEdit('desiredPosition', e.target.innerText)}>
+             {cvForm.desiredPosition || 'Software Developer'}
+          </h2>
+          <div className="h-contact">
+             <span><Phone size={12}/> {candidate?.phone || '0966535218'}</span>
+             <span><Mail size={12}/> {candidate?.email || 'nguyenvandai.dev@gmail.com'}</span>
+             <span><MapPin size={12}/> {candidate?.location || 'Ha Noi'}</span>
+          </div>
+       </div>
+
+       <div className="h-section">
+          <h3>OBJECTIVE</h3>
+          <div className="h-divider"></div>
+          <p className="h-text" contentEditable={isEditable} suppressContentEditableWarning onBlur={e => handleEdit('summary', e.target.innerText)}>
+             {cvForm.summary || 'Software Developer with 4+ years of experience across Banking, Logistics, and ERP domains. Strong in back-end development using Java, with solid expertise in microservices, databases.\nExperienced in Digital Banking, focusing on card systems, payment processing, and automated earning features, ensuring high performance, security, and scalability.'}
+          </p>
+       </div>
+
+       <div className="h-section">
+          <h3>WORK EXPERIENCE</h3>
+          <div className="h-divider"></div>
+          
+          <div className="h-job">
+             <div className="h-job-header">
+                <strong>Alphaway JSC</strong>
+                <span>02/2026 - Present</span>
+             </div>
+             <div className="h-job-role">
+                <strong>Java Developer</strong>
+             </div>
+             <div className="h-job-company">
+                <strong>SHB Bank</strong>
+             </div>
+             <div className="h-job-subrole">
+                <strong>Java Backend Developer | 02/2026 - Present</strong>
+             </div>
+             <div className="h-job-project">
+                <strong>Project: Digital Banking - Auto Profit System</strong>
+             </div>
+             <ul className="h-list">
+                {parseList(cvForm.experience).length > 0 ? parseList(cvForm.experience).map((item, i) => <li key={i}>{item}</li>) : (
+                   <>
+                     <li>Designed auto-profit (auto-sweep) mechanism to optimize idle balance utilization and maximize returns.</li>
+                     <li>Developed backend services for Digital Banking platform focusing on auto-profit (auto-sweep) and payment systems integrated with Core Banking.</li>
+                     <li>Built transaction flows ensuring idempotency, consistency, and fault tolerance.</li>
+                   </>
+                )}
+             </ul>
+          </div>
+       </div>
+
+       <div className="h-section">
+          <h3>EDUCATION</h3>
+          <div className="h-divider"></div>
+          <div className="h-job-header">
+             <strong>Ha Noi Open University</strong>
+             <span>2019 - 2023</span>
+          </div>
+          <div className="h-text" contentEditable={isEditable} suppressContentEditableWarning onBlur={e => handleEdit('education', e.target.innerText)}>
+             {cvForm.education || 'Information technology'}
+          </div>
+       </div>
+
+       <div className="h-section">
+          <h3>CERTIFICATES</h3>
+          <div className="h-divider"></div>
+          {parseList(cvForm.certifications).length > 0 ? parseList(cvForm.certifications).map((cert, i) => (
+             <div className="h-cert" key={i}>
+                <span>{cert}</span>
+                <strong>{new Date().getFullYear()}</strong>
+             </div>
+          )) : (
+             <>
+               <div className="h-cert">
+                  <span>Oracle Database Services 2025 Certified Professional</span>
+                  <strong>2025</strong>
+               </div>
+               <div className="h-cert">
+                  <span>MySQL HeatWave Implementation (Oracle Certified Associate)</span>
+                  <strong>2024</strong>
+               </div>
+               <div className="h-cert">
+                  <span>Java SE 8 Oracle Certified Associate (OCA)</span>
+                  <strong>2023</strong>
+               </div>
+             </>
+          )}
+       </div>
+
+       <div className="h-section">
+          <h3>SKILLS</h3>
+          <div className="h-divider"></div>
+          <div className="h-text" style={{ whiteSpace: 'pre-wrap' }} contentEditable={isEditable} suppressContentEditableWarning onBlur={e => handleEdit('skills', e.target.innerText)}>
+             {cvForm.skills || 'Backend: Java, Spring Boot, Microservices\nDatabase: PostgreSQL, MySQL, Oracle, MongoDB\nMessaging: Kafka, Redis'}
+          </div>
+       </div>
+    </div>
+  );
+}
+
+function CvTemplateSelector({ cvForm, setCvForm, setCvStep }) {
+  const [activeFilter, setActiveFilter] = useState('Tất cả');
+  
+  const filters = ['Tất cả', 'Đơn giản', 'Chuyên nghiệp', 'Hiện đại', 'Ấn tượng', 'Harvard', 'ATS'];
+  
+  const CV_TEMPLATES = [
+    { id: 'classic', name: 'Tiêu chuẩn', tags: ['ATS', 'Đơn giản'], colors: ['#000000', '#4b5563', '#1d4ed8', '#7f1d1d'], isNew: false },
+    { id: 'modern', name: 'Tiêu chuẩn (ít kinh nghiệm)', tags: ['ATS', 'Đơn giản', 'Chuyên nghiệp'], colors: ['#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1'], isNew: true },
+    { id: 'creative', name: 'Ấn tượng 6', tags: ['ATS', 'Hiện đại', 'Chuyên nghiệp'], colors: ['#3f3f46', '#52525b', '#71717a', '#a1a1aa'], isNew: false },
+    { id: 'tech', name: 'Ấn tượng 2', tags: ['ATS', 'Chuyên nghiệp'], colors: ['#4b5563', '#10b981', '#ef4444', '#3b82f6'], isNew: false },
+    { id: 'minimal', name: 'Thanh lịch', tags: ['ATS', 'Đơn giản', 'Hiện đại'], colors: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b'], isNew: false },
+    { id: 'executive', name: 'Tham vọng', tags: ['ATS', 'Chuyên nghiệp', 'Ấn tượng'], colors: ['#f59e0b', '#3b82f6'], isNew: false },
+  ];
+
+  const dummyCv = {
+    desiredPosition: 'Software Developer',
+    experienceLevel: 'Senior',
+    summary: 'Experienced developer with a passion for building scalable web applications.',
+    skills: 'React, Node.js, Java, Spring Boot',
+    education: 'Hanoi University of Science and Technology',
+    experience: '4 years at TopTech Corp\nDeveloped main product features.',
+  };
+  const dummyCandidate = {
+    fullName: 'Le Chien',
+    email: 'chien.le@topcv.vn',
+    phone: '(024) 6680 5588'
+  };
+
+  return (
+    <div className="cv-template-page">
+      <div className="cv-filter-bar">
+        {filters.map((filter) => (
+          <button 
+            key={filter} 
+            className={`cv-filter-btn ${activeFilter === filter ? 'active' : ''}`}
+            onClick={() => setActiveFilter(filter)}
+          >
+            {filter === 'Tất cả' && <CheckCircle2 size={16} />}
+            {filter !== 'Tất cả' && <FileText size={16} />}
+            {filter}
+          </button>
+        ))}
+        <select className="cv-filter-dropdown">
+          <option>🇻🇳 Tiếng Việt</option>
+          <option>🇬🇧 Tiếng Anh</option>
+        </select>
+      </div>
+
+      <div className="cv-template-grid">
+        {CV_TEMPLATES.map((tpl) => (
+          <div key={tpl.id} className={`cv-template-card ${cvForm.template === tpl.id ? 'active-card' : ''}`}>
+            <div className="cv-template-image-container">
+              {tpl.isNew && <span className="cv-badge-new">✱ Mới</span>}
+              <div className="cv-miniature-wrapper">
+                <div style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: '250%', height: '250%', pointerEvents: 'none' }}>
+                  <CvPreview cvForm={{ ...dummyCv, template: tpl.id }} candidate={dummyCandidate} />
+                </div>
+              </div>
+              <div className="cv-template-overlay">
+                <button 
+                  className="cv-use-btn"
+                  onClick={() => {
+                    setCvForm({ ...cvForm, template: tpl.id });
+                    setCvStep('fill-form');
+                  }}
+                >
+                  Dùng mẫu
+                </button>
+              </div>
+            </div>
+            <div className="cv-template-info">
+              <div className="cv-color-dots">
+                {tpl.colors.map((color, idx) => (
+                  <div key={idx} className={`cv-color-dot ${idx === 0 ? 'active' : ''}`} style={{ backgroundColor: color }}></div>
+                ))}
+              </div>
+              <h3>{tpl.name}</h3>
+              <div className="cv-template-tags">
+                {tpl.tags.map(tag => (
+                  <span key={tag} className="cv-tag">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
 function EmployerView({ activeTab, jobs, selectedJob, applications, setSelectedJobId, employers, jobForm, setJobForm, submitJob, acceptApplication, rejectApplication, notifications }) {
   const employerJobs = jobs.filter((job) => Number(job.employerId) === Number(jobForm.employerId));
