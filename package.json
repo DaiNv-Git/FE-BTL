@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.1",
-    "vite": "^7.2.7",
-    "typescript": "^5.9.3",
+    "html2pdf.js": "^0.14.0",
+    "lucide-react": "^0.561.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "lucide-react": "^0.561.0"
-  },
-  "devDependencies": {}
+    "typescript": "^5.9.3",
+    "vite": "^7.2.7"
+  }
 }
